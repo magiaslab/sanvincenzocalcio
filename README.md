@@ -1,59 +1,166 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ⚽ San Vincenzo Calcio - Sistema di Gestione
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema completo di gestione per società calcistiche sviluppato con Laravel e Filament.
 
-## About Laravel
+## 🚀 Caratteristiche Principali
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Gestione Atleti**: CRUD completo con relazioni genitori e squadre
+- **Gestione Squadre**: Assegnazione allenatori e staff tecnico
+- **Gestione Eventi**: Allenamenti, partite e tornei con calendario interattivo
+- **Presenze e Convocazioni**: Registrazione presenze e gestione convocazioni
+- **Statistiche Avanzate**: Dashboard con grafici e reportistica PDF
+- **Certificati Medici**: Upload e gestione scadenze certificati
+- **Sistema RBAC**: 4 ruoli con permessi granulari (Super Admin, Dirigente, Allenatore, Genitore)
+- **Export PDF**: Report statistiche e presenze
+- **Ottimizzazione Mobile**: Interfaccia responsive e ottimizzata per dispositivi mobili
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Stack Tecnologico
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: PHP 8.2+, Laravel 12.0
+- **Frontend**: Filament 3.2, Tailwind CSS 4.0, Livewire 3.x
+- **Database**: SQLite (sviluppo) / MySQL/PostgreSQL (produzione)
+- **Librerie**: Spatie Permission, DomPDF, FullCalendar, Chart.js
+- **Email**: Resend.com
 
-## Learning Laravel
+## 📋 Requisiti
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP >= 8.2
+- Composer
+- Node.js e npm
+- SQLite/MySQL/PostgreSQL
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🔧 Installazione
 
-## Laravel Sponsors
+1. **Clona il repository**
+```bash
+git clone https://github.com/TUO_USERNAME/sanvincenzocalcio.git
+cd sanvincenzocalcio
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Installa le dipendenze**
+```bash
+composer install
+npm install
+```
 
-### Premium Partners
+3. **Configura l'ambiente**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. **Configura il database nel file `.env`**
+```env
+DB_CONNECTION=sqlite
+# oppure
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nome_database
+DB_USERNAME=username
+DB_PASSWORD=password
+```
 
-## Contributing
+5. **Esegui le migrazioni e i seeder**
+```bash
+php artisan migrate
+php artisan db:seed --class=RolesPermissionsSeeder
+php artisan db:seed --class=VerifyPermissionsSeeder
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. **Crea un utente super admin**
+```bash
+php artisan tinker
+```
+```php
+$user = \App\Models\User::create([
+    'name' => 'Admin',
+    'email' => 'admin@example.com',
+    'password' => bcrypt('password'),
+]);
+$user->assignRole('super_admin');
+```
 
-## Code of Conduct
+7. **Compila gli asset**
+```bash
+npm run build
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+8. **Avvia il server**
+```bash
+php artisan serve
+```
 
-## Security Vulnerabilities
+Accedi a `http://localhost:8000/admin` e fai login con le credenziali create.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📚 Documentazione
 
-## License
+- [Riepilogo Funzionalità](RIEPILOGO_FUNZIONALITA.md) - Documentazione completa delle funzionalità implementate
+- [Riepilogo Permessi Genitore](RIEPILOGO_PERMESSI_GENITORE.md) - Guida permessi per ruolo genitore
+- [Verifica Permessi Mobile](VERIFICA_PERMESSI_MOBILE.md) - Ottimizzazioni mobile
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 👥 Ruoli e Permessi
+
+Il sistema supporta 4 ruoli principali:
+
+- **Super Admin**: Accesso completo a tutte le funzionalità
+- **Dirigente**: Gestione completa esclusi ruoli
+- **Allenatore**: Gestione tecnica (eventi, presenze, convocazioni)
+- **Genitore**: Visualizzazione dati propri figli e gestione certificati
+
+## 🎯 Funzionalità Principali
+
+### Dashboard
+- Widget prossimi eventi (allenamenti e partite)
+- Statistiche atleti e squadre
+- Grafici presenze nel tempo
+- Notifiche certificati in scadenza
+
+### Gestione Atleti
+- CRUD completo atleti
+- Upload certificati medici
+- Statistiche presenze
+- Export PDF statistiche
+
+### Gestione Eventi
+- Calendario interattivo
+- Filtri avanzati
+- Gestione allenamenti, partite e tornei
+
+### Statistiche e Reportistica
+- Dashboard statistiche avanzate
+- Grafici presenze nel tempo
+- Report PDF stagionali
+- Confronto statistiche atleti/squadre
+
+## 🔒 Sicurezza
+
+- Sistema RBAC completo con Spatie Laravel Permission
+- Policy-based authorization
+- Protezione CSRF su tutte le form
+- Validazione e sanitizzazione input
+- File upload sicuri con validazione
+
+## 📱 Mobile
+
+L'interfaccia è completamente ottimizzata per dispositivi mobili:
+- Tabelle responsive con colonne toggleabili
+- Form ottimizzati per touch
+- Layout adattivo
+- Date picker mobile-friendly
+
+## 🤝 Contribuire
+
+Le pull request sono benvenute! Per cambiamenti importanti, apri prima una issue per discutere cosa vorresti cambiare.
+
+## 📄 Licenza
+
+Questo progetto è open source e disponibile sotto la [MIT License](LICENSE).
+
+## 👨‍💻 Sviluppatore
+
+Sviluppato per San Vincenzo Calcio
+
+---
+
+*Ultimo aggiornamento: Gennaio 2025*
