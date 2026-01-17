@@ -69,4 +69,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(Athlete::class, 'parent_id');
     }
+
+    public function socialAccounts(): HasMany
+    {
+        return $this->hasMany(SocialAccount::class);
+    }
 }
