@@ -1,0 +1,57 @@
+{
+  "name": "San Vincenzo Calcio",
+  "short_name": "San Vincenzo",
+  "description": "Sistema di gestione calcio - San Vincenzo Calcio",
+  "start_url": "/admin",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "192x192",
+      "type": "image/x-icon",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "512x512",
+      "type": "image/x-icon",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["sports", "productivity"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Vai alla dashboard",
+      "url": "/admin",
+      "icons": [
+        {
+          "src": "/favicon.ico",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Statistiche",
+      "short_name": "Statistiche",
+      "description": "Visualizza statistiche",
+      "url": "/admin/statistics",
+      "icons": [
+        {
+          "src": "/favicon.ico",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

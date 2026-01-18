@@ -19,8 +19,8 @@ class BulkCreateConvocations extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-plus';
-    protected static ?string $navigationLabel = 'Convola Atleti Multiple';
-    protected static ?string $title = 'Convola Atleti Multiple';
+    protected static ?string $navigationLabel = 'Convocazioni Multiple';
+    protected static ?string $title = 'Convocazioni Multiple';
     protected static ?string $navigationGroup = 'Operazioni Rapide';
     protected static string $view = 'filament.pages.bulk-create-convocations';
 

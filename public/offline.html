@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - San Vincenzo Calcio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #1f2937;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: #fef3c7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1f2937;
+        }
+        
+        p {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #f59e0b;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        
+        .button:hover {
+            background: #d97706;
+        }
+        
+        .retry-button {
+            margin-top: 16px;
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .retry-button:hover {
+            background: #d1d5db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📡</div>
+        <h1>Sei offline</h1>
+        <p>
+            Sembra che tu non abbia una connessione internet attiva. 
+            Alcune funzionalità potrebbero non essere disponibili.
+        </p>
+        <a href="/admin" class="button">Riprova</a>
+        <button onclick="window.location.reload()" class="button retry-button">
+            Aggiorna pagina
+        </button>
+    </div>
+    
+    <script>
+        // Controlla se la connessione è stata ripristinata
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+        
+        // Mostra notifica quando torna online
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then((registration) => {
+                console.log('Service Worker pronto');
+            });
+        }
+    </script>
+</body>
+</html>

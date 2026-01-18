@@ -1,9 +1,9 @@
 <x-filament-panels::page>
     <div class="space-y-6">
-        {{-- Filtri Calendario --}}
+        {{-- Filtri --}}
         <x-filament::section>
             <x-slot name="heading">
-                Filtri Calendario
+                Filtri Eventi
             </x-slot>
 
             <form wire:submit.prevent class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -55,6 +55,13 @@
                 @endif
             </form>
         </x-filament::section>
+
+        {{-- Widget Calendario - Renderizzato manualmente con key dinamica per aggiornamento --}}
+        @livewire(\App\Filament\Widgets\CalendarWidget::class, [
+            'teamFilter' => $this->teamFilter ?? null,
+            'coachFilter' => $this->coachFilter ?? null,
+            'athleteFilter' => $this->athleteFilter ?? null,
+        ], key('calendar-' . ($this->teamFilter ?? 'all') . '-' . ($this->coachFilter ?? 'all') . '-' . ($this->athleteFilter ?? 'all')))
 
         {{-- Tabella Eventi --}}
         {{ $this->table }}

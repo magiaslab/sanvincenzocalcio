@@ -75,14 +75,18 @@ class ConvocationResource extends Resource
                         default => 'gray',
                     })
                     ->sortable(),
-                Tables\Columns\TextColumn::make('event.start_time')
-                    ->label('Data Evento')
-                    ->dateTime('d/m/Y H:i')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('event.title')
                     ->label('Titolo Partita')
                     ->searchable()
-                    ->limit(30)
+                    ->sortable()
+                    ->default('N/D')
+                    ->formatStateUsing(fn ($state, $record) => $state ?: ($record->event->team->name ?? 'N/D') . ' - ' . ($record->event->start_time?->format('d/m/Y H:i') ?? 'N/D'))
+                    ->limit(50)
+                    ->wrap(),
+                Tables\Columns\TextColumn::make('event.start_time')
+                    ->label('Data Evento')
+                    ->dateTime('d/m/Y H:i')
+                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('event.team.name')
                     ->label('Squadra')
@@ -101,11 +105,27 @@ class ConvocationResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('event.start_time', 'desc')
+            ->defaultSort('created_at', 'desc')
             ->striped()
             ->paginated([10, 25, 50])
             ->recordUrl(null)
             ->filters([
+                Tables\Filters\SelectFilter::make('event_id')
+                    ->label('Partita')
+                    ->options(function () {
+                        return Event::whereIn('type', ['partita', 'torneo'])
+                            ->with('team')
+                            ->get()
+                            ->mapWithKeys(function ($event) {
+                                $title = $event->title;
+                                $label = $title 
+                                    ?: ($event->team->name ?? 'N/D') . ' - ' . ($event->start_time?->format('d/m/Y H:i') ?? 'N/D');
+                                return [$event->id => $label];
+                            })
+                            ->toArray();
+                    })
+                    ->searchable()
+                    ->preload(),
                 Tables\Filters\SelectFilter::make('event.team')
                     ->label('Squadra')
                     ->relationship('event.team', 'name')

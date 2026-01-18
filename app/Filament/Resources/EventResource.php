@@ -51,12 +51,18 @@ class EventResource extends Resource
                             ->required()
                             ->default('allenamento')
                             ->live()
-                            ->native(false),
+                            ->native(false)
+                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                if (!in_array($state, ['partita', 'torneo'])) {
+                                    $set('title', null);
+                                }
+                            }),
                         Forms\Components\TextInput::make('title')
                             ->label('Titolo Partita/Torneo')
                             ->placeholder('Es. Partita di Campionato vs Squadra X')
                             ->maxLength(255)
-                            ->visible(fn ($get) => in_array($get('type'), ['partita', 'torneo'])),
+                            ->hidden(fn (Forms\Get $get) => !in_array($get('type'), ['partita', 'torneo']))
+                            ->dehydrated(fn (Forms\Get $get) => in_array($get('type'), ['partita', 'torneo'])),
                         Forms\Components\Select::make('field_id')
                             ->relationship('field', 'name')
                             ->label('Campo')
@@ -116,10 +122,12 @@ class EventResource extends Resource
                     ->sortable()
                     ->weight('bold'),
                 Tables\Columns\TextColumn::make('title')
-                    ->label('Titolo')
+                    ->label('Titolo Partita')
                     ->searchable()
                     ->limit(30)
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->default('N/D')
+                    ->formatStateUsing(fn ($state, $record) => $state ?: 'N/D')
+                    ->visible(fn ($record) => $record && in_array($record->type ?? '', ['partita', 'torneo'])),
                 Tables\Columns\TextColumn::make('field.name')
                     ->label('Campo')
                     ->searchable()
@@ -145,6 +153,7 @@ class EventResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->visible(fn () => auth()->user()?->hasAnyRole(['super_admin', 'dirigente', 'allenatore'])),
             ])
+            ->recordUrl(fn ($record) => EventResource::getUrl('view', ['record' => $record]))
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
@@ -184,6 +193,7 @@ class EventResource extends Resource
         return [
             'index' => Pages\ListEvents::route('/'),
             'create' => Pages\CreateEvent::route('/create'),
+            'view' => Pages\ViewEvent::route('/{record}'),
             'edit' => Pages\EditEvent::route('/{record}/edit'),
         ];
     }

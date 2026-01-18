@@ -42,29 +42,65 @@ class ListEvents extends ListRecords implements HasForms
         return $actions;
     }
 
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            CalendarWidget::make([
-                'teamFilter' => $this->teamFilter,
-                'coachFilter' => $this->coachFilter,
-                'athleteFilter' => $this->athleteFilter,
-            ]),
-        ];
-    }
+    // Rimossi i widget dall'header perché vengono renderizzati manualmente nella vista
+    // protected function getHeaderWidgets(): array
+    // {
+    //     return [
+    //         CalendarWidget::make([
+    //             'teamFilter' => $this->teamFilter,
+    //             'coachFilter' => $this->coachFilter,
+    //             'athleteFilter' => $this->athleteFilter,
+    //         ]),
+    //     ];
+    // }
 
     public function updatedTeamFilter(): void
     {
         $this->dispatch('update-calendar-filters', teamFilter: $this->teamFilter);
+        $this->resetTable();
+        // Forza l'aggiornamento del calendario
+        $this->dispatch('$refresh');
     }
 
     public function updatedCoachFilter(): void
     {
         $this->dispatch('update-calendar-filters', coachFilter: $this->coachFilter);
+        $this->resetTable();
+        // Forza l'aggiornamento del calendario
+        $this->dispatch('$refresh');
     }
 
     public function updatedAthleteFilter(): void
     {
         $this->dispatch('update-calendar-filters', athleteFilter: $this->athleteFilter);
+        $this->resetTable();
+        // Forza l'aggiornamento del calendario
+        $this->dispatch('$refresh');
+    }
+
+    protected function getTableQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getTableQuery();
+        
+        // Applica filtri
+        if ($this->teamFilter) {
+            $query->where('team_id', $this->teamFilter);
+        }
+        
+        if ($this->coachFilter) {
+            $query->whereHas('team', function ($q) {
+                $q->where('coach_id', $this->coachFilter);
+            });
+        }
+        
+        if ($this->athleteFilter) {
+            $query->whereHas('team', function ($q) {
+                $q->whereHas('athletes', function ($aq) {
+                    $aq->where('athletes.id', $this->athleteFilter);
+                });
+            });
+        }
+        
+        return $query;
     }
 }

@@ -36,6 +36,15 @@ class CalendarWidget extends FullCalendarWidget
         if ($athleteFilter !== null) {
             $this->athleteFilter = $athleteFilter;
         }
+        // Forza il refresh del calendario
+        $this->dispatch('refresh-calendar');
+    }
+    
+    public function mount(?int $teamFilter = null, ?int $coachFilter = null, ?int $athleteFilter = null): void
+    {
+        $this->teamFilter = $teamFilter;
+        $this->coachFilter = $coachFilter;
+        $this->athleteFilter = $athleteFilter;
     }
 
 
@@ -80,6 +89,7 @@ class CalendarWidget extends FullCalendarWidget
                     })
                     ->start($event->start_time)
                     ->end($event->end_time)
+                    ->url(\App\Filament\Resources\EventResource::getUrl('view', ['record' => $event]))
                     ->backgroundColor(match($event->type) {
                         'allenamento' => '#3b82f6', // blue
                         'partita' => '#10b981', // green
@@ -137,7 +147,13 @@ class CalendarWidget extends FullCalendarWidget
                     'riunione' => 'Riunione',
                 ])
                 ->required()
-                ->default('allenamento'),
+                ->default('allenamento')
+                ->live(),
+            Forms\Components\TextInput::make('title')
+                ->label('Titolo Partita/Torneo')
+                ->placeholder('Es. Partita di Campionato vs Squadra X')
+                ->maxLength(255)
+                ->hidden(fn (Forms\Get $get) => !in_array($get('type'), ['partita', 'torneo'])),
             Forms\Components\DateTimePicker::make('start_time')
                 ->label('Inizio')
                 ->required(),
